@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFactor | Premium Community Fitness in Kollam</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Oswald:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-dark': '#1a0b2e',      /* Deepest Purple/Black */
+                        'brand-purple': '#4c1d95',    /* Rich Purple */
+                        'brand-purple-light': '#8b5cf6', /* Light Accent Purple */
+                        'brand-orange': '#ff6b00',    /* Vibrant Orange */
+                        'brand-orange-hover': '#e65100',
+                        'brand-gray': '#f3f4f6',      /* Light Gray BG */
+                        'text-main': '#1f2937',       /* Dark Gray Text */
+                        'text-light': '#6b7280',      /* Light Gray Text */
+                    },
+                    fontFamily: {
+                        sans: ['Manrope', 'sans-serif'],
+                        heading: ['Oswald', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Utilities */
+        body {
+            background-color: #ffffff;
+            color: #1f2937;
+            font-family: 'Manrope', sans-serif;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Oswald', sans-serif;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        /* Smooth Transitions for Views */
+        .page-view {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+            min-height: 100vh;
+            padding-top: 80px;
+            /* Offset for fixed header */
+        }
+
+        .page-view.active {
+            display: block;
+            opacity: 1;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Carousel Styles */
+        .carousel-wrapper {
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .carousel-track {
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+            padding-bottom: 20px;
+        }
+
+        .carousel-track::-webkit-scrollbar {
+            display: none;
+        }
+
+        .carousel-card {
+            min-width: 300px;
+            flex: 0 0 auto;
+        }
+
+        /* Offer Popup */
+        .offer-popup {
+            background: rgba(26, 11, 46, 0.95);
+            backdrop-filter: blur(8px);
+        }
+
+        /* Modern Button Hover */
+        .btn-modern {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .btn-modern::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn-modern:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .feature-card {
+            transition: all 0.3s ease;
+            border-bottom: 4px solid transparent;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-bottom: 4px solid #ff6b00;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <!-- Offers Popup -->
+    <div id="offerPopup"
+        class="fixed inset-0 z-[100] flex items-center justify-center offer-popup opacity-0 pointer-events-none transition-opacity duration-500">
+        <div class="bg-white rounded-lg p-1 max-w-lg w-[90%] md:w-full shadow-2xl transform scale-95 transition-transform duration-300"
+            id="offerContent">
+            <div
+                class="relative bg-gradient-to-br from-brand-purple to-brand-dark p-8 rounded-lg overflow-hidden text-center text-white">
+                <button onclick="closeOffer()" class="absolute top-4 right-4 text-white/70 hover:text-white">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+                <div class="absolute -top-10 -left-10 w-32 h-32 bg-brand-orange rounded-full blur-3xl opacity-20"></div>
+
+                <h3 class="text-3xl font-bold mb-2 text-brand-orange">FLASH SALE!</h3>
+                <p class="text-xl mb-6 font-sans">Get <span class="font-bold text-white">50% OFF</span> your first month
+                    of Online Coaching.</p>
+
+                <div class="bg-white/10 backdrop-blur-sm p-4 rounded-lg mb-6 border border-white/10">
+                    <p class="text-sm font-sans mb-1 text-gray-300">Use Code:</p>
+                    <div class="text-2xl font-mono tracking-widest font-bold text-brand-orange">FIT50NOW</div>
+                </div>
+
+                <button onclick="navigateTo('details'); closeOffer()"
+                    class="w-full py-3 bg-brand-orange text-white font-bold uppercase tracking-wider hover:bg-brand-orange-hover transition-colors rounded">
+                    Claim Offer
+                </button>
+                <p class="text-xs text-gray-400 mt-4 font-sans">Valid for new members only. Ends in 24 hours.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 transition-all duration-300 shadow-sm"
+        id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="navigateTo('home')">
+                    <div class="w-10 h-10 bg-brand-purple rounded-lg flex items-center justify-center mr-2">
+                        <span class="text-white font-heading font-bold text-xl">F</span>
+                    </div>
+                    <span class="font-heading font-bold text-2xl text-brand-dark">FIT<span
+                            class="text-brand-orange">FACTOR</span></span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" onclick="navigateTo('home')"
+                        class="font-sans font-medium text-brand-dark hover:text-brand-purple transition-colors">Home</a>
+                    <a href="#" onclick="navigateTo('about')"
+                        class="font-sans font-medium text-brand-dark hover:text-brand-purple transition-colors">About
+                        Us</a>
+                    <a href="#" onclick="navigateTo('details')"
+                        class="font-sans font-medium text-brand-dark hover:text-brand-purple transition-colors">Pricing
+                        & Plans</a>
+                    <a href="#" onclick="navigateTo('contact')"
+                        class="font-sans font-medium text-brand-dark hover:text-brand-purple transition-colors">Contact</a>
+                    <button onclick="navigateTo('contact')"
+                        class="btn-modern px-6 py-2.5 bg-brand-purple text-white font-bold uppercase text-sm tracking-wider rounded hover:bg-brand-dark transition-colors">
+                        Book Consultation
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button onclick="toggleMobileMenu()"
+                        class="text-brand-dark hover:text-brand-purple focus:outline-none">
+                        <i data-lucide="menu" class="w-8 h-8"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobileMenu" class="md:hidden hidden bg-white border-t border-gray-100 absolute w-full shadow-xl">
+            <div class="px-4 pt-2 pb-6 space-y-1">
+                <a href="#" onclick="navigateTo('home'); toggleMobileMenu()"
+                    class="block px-3 py-3 rounded-md text-base font-medium text-brand-dark hover:bg-gray-50 hover:text-brand-purple">Home</a>
+                <a href="#" onclick="navigateTo('about'); toggleMobileMenu()"
+                    class="block px-3 py-3 rounded-md text-base font-medium text-brand-dark hover:bg-gray-50 hover:text-brand-purple">About
+                    Us</a>
+                <a href="#" onclick="navigateTo('details'); toggleMobileMenu()"
+                    class="block px-3 py-3 rounded-md text-base font-medium text-brand-dark hover:bg-gray-50 hover:text-brand-purple">Pricing
+                    & Plans</a>
+                <a href="#" onclick="navigateTo('contact'); toggleMobileMenu()"
+                    class="block px-3 py-3 rounded-md text-base font-medium text-brand-dark hover:bg-gray-50 hover:text-brand-purple">Contact</a>
+                <a href="#" onclick="navigateTo('contact'); toggleMobileMenu()"
+                    class="block px-3 py-3 mt-4 text-center rounded bg-brand-orange text-white font-bold uppercase">Book
+                    Now</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="relative min-h-screen">
+
+        <!-- ==================== HOME PAGE ==================== -->
+        <section id="home" class="page-view active">
+
+            <!-- Hero Section -->
+            <div class="relative overflow-hidden pt-10 pb-20 lg:pt-24">
+                <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-brand-purple/10 rounded-full blur-3xl">
+                </div>
+                <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-brand-orange/10 rounded-full blur-3xl">
+                </div>
+
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+                    <div class="grid lg:grid-cols-2 gap-12 items-center">
+                        <div class="space-y-8 animate-fade-in-up">
+                            <div
+                                class="inline-flex items-center px-4 py-2 rounded-full bg-brand-purple/10 text-brand-purple font-semibold text-sm">
+                                <span class="w-2 h-2 rounded-full bg-brand-orange mr-2"></span>
+                                Premium Community Fitness
+                            </div>
+                            <h1 class="text-5xl lg:text-7xl font-bold text-brand-dark leading-tight">
+                                FITNESS FOR <br>
+                                <span class="text-brand-purple">EVERY BODY.</span><br>
+                                <span class="text-brand-orange">EVERY AGE.</span>
+                            </h1>
+                            <p class="text-xl text-gray-600 font-sans max-w-lg leading-relaxed">
+                                Premium community-first fitness in the heart of Kollam. Join the most trusted gym in the
+                                city.
+                            </p>
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <a href="https://wa.me/"
+                                    class="px-8 py-4 bg-brand-orange text-white font-bold uppercase tracking-wider rounded shadow-lg shadow-brand-orange/30 hover:shadow-brand-orange/50 hover:bg-brand-orange-hover transition-all text-center flex items-center justify-center gap-2">
+                                    <i class="fab fa-whatsapp text-lg"></i> Join on WhatsApp
+                                </a>
+                                <button onclick="navigateTo('contact')"
+                                    class="px-8 py-4 bg-white text-brand-purple border-2 border-brand-purple font-bold uppercase tracking-wider rounded hover:bg-brand-purple hover:text-white transition-all">
+                                    Free Consultation
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Hero Image -->
+                        <div class="relative lg:h-[600px] rounded-2xl overflow-hidden shadow-2xl">
+                            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1920&q=80"
+                                alt="Gym Interior"
+                                class="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-700">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Online Coaching Section (NEW REQUEST) -->
+            <section class="py-20 bg-brand-dark text-white relative overflow-hidden">
+                <div class="absolute inset-0 opacity-10"
+                    style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'0 0 2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');">
+                </div>
+
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="grid lg:grid-cols-2 gap-16 items-center">
+                        <div class="order-2 lg:order-1 relative">
+                            <div class="absolute -inset-4 bg-brand-purple rounded-lg rotate-3 opacity-30"></div>
+                            <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80"
+                                alt="Online Coaching"
+                                class="relative rounded-lg shadow-2xl w-full object-cover h-[500px]">
+                        </div>
+
+                        <div class="order-1 lg:order-2">
+                            <span
+                                class="text-brand-orange font-bold tracking-widest uppercase text-sm mb-2 block">Global
+                                Access</span>
+                            <h2 class="text-4xl lg:text-5xl font-bold mb-6">ONLINE TRANSFORMATION PROGRAM</h2>
+                            <p class="text-gray-300 text-lg mb-8 font-sans leading-relaxed">
+                                Can't make it to our Kollam facility? Train with us from anywhere. Our Online
+                                Transformation Program gives you the same expert guidance, nutrition planning, and
+                                accountability right on your phone.
+                            </p>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                                <div class="flex items-center gap-3">
+                                    <div class="bg-brand-purple p-2 rounded-full text-white"><i data-lucide="smartphone"
+                                            class="w-4 h-4"></i></div>
+                                    <span class="font-sans">Custom App Access</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="bg-brand-purple p-2 rounded-full text-white"><i data-lucide="video"
+                                            class="w-4 h-4"></i></div>
+                                    <span class="font-sans">Weekly Video Check-ins</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="bg-brand-purple p-2 rounded-full text-white"><i data-lucide="utensils"
+                                            class="w-4 h-4"></i></div>
+                                    <span class="font-sans">Macro-based Nutrition</span>
+                                </div>
+                            </div>
+
+                            <button onclick="navigateTo('contact')"
+                                class="px-8 py-3 bg-brand-orange text-white font-bold uppercase tracking-wider rounded hover:bg-brand-orange-hover transition-colors">
+                                Book a Call
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Daily Live Workout Sessions Section -->
+            <section class="py-20 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-3xl mx-auto mb-12">
+                        <span class="text-brand-orange font-bold tracking-widest uppercase text-sm mb-2 block">Virtual
+                            Fitness</span>
+                        <h2 class="text-4xl lg:text-5xl font-bold text-brand-dark mb-4">DAILY LIVE WORKOUT SESSIONS</h2>
+                        <p class="text-gray-600 font-sans text-lg leading-relaxed">
+                            Can't make it to the gym? Join our expert trainers for daily live interactive workout
+                            sessions. Get real-time feedback, stay motivated, and sweat it out with our online community
+                            anywhere you are.
+                        </p>
+                    </div>
+
+                    <div
+                        class="max-w-5xl mx-auto relative rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-brand-dark border-4 border-white/50">
+                        <video class="w-full aspect-video object-cover relative z-10" controls
+                            poster="https://images.unsplash.com/photo-1554284126-aa88f22d8b74?w=1920&q=80">
+                            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Section (Restored Original Content) -->
+            <section class="py-20 bg-gray-50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-3xl mx-auto mb-16">
+                        <h2 class="text-4xl font-bold text-brand-dark mb-4">THE MOST TRUSTED GYM IN KOLLAM</h2>
+                        <p class="text-brand-purple font-medium text-lg">For a Reason.</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Feature 1 -->
+                        <div class="feature-card bg-white p-8 rounded-xl shadow-sm hover:shadow-xl">
+                            <div class="text-5xl font-bold text-brand-purple/20 mb-4">01</div>
+                            <h3 class="text-xl font-bold text-brand-dark mb-3">FREE InBody</h3>
+                            <p class="text-gray-600 font-sans">Track your progress with scientific accuracy. Body
+                                composition analysis included with memberships.</p>
+                        </div>
+
+                        <!-- Feature 2 -->
+                        <div class="feature-card bg-white p-8 rounded-xl shadow-sm hover:shadow-xl">
+                            <div class="text-5xl font-bold text-brand-purple/20 mb-4">02</div>
+                            <h3 class="text-xl font-bold text-brand-dark mb-3">FREE Steam Bath</h3>
+                            <p class="text-gray-600 font-sans">Premium recovery at no extra cost. Relax your muscles
+                                after a hard session.</p>
+                        </div>
+
+                        <!-- Feature 3 -->
+                        <div class="feature-card bg-white p-8 rounded-xl shadow-sm hover:shadow-xl">
+                            <div class="text-5xl font-bold text-brand-purple/20 mb-4">03</div>
+                            <h3 class="text-xl font-bold text-brand-dark mb-3">Open All Days</h3>
+                            <p class="text-gray-600 font-sans">Consistency without compromise. We are open 7 days a
+                                week.</p>
+                        </div>
+
+                        <!-- Feature 4 -->
+                        <div class="feature-card bg-white p-8 rounded-xl shadow-sm hover:shadow-xl">
+                            <div class="text-5xl font-bold text-brand-purple/20 mb-4">04</div>
+                            <h3 class="text-xl font-bold text-brand-dark mb-3">Freeze Anytime</h3>
+                            <p class="text-gray-600 font-sans">Going out of town? Pause your plan when life happens so
+                                you don't lose days.</p>
+                        </div>
+
+                        <!-- Feature 5 -->
+                        <div class="feature-card bg-white p-8 rounded-xl shadow-sm hover:shadow-xl">
+                            <div class="text-5xl font-bold text-brand-purple/20 mb-4">05</div>
+                            <h3 class="text-xl font-bold text-brand-dark mb-3">All-Day Hours</h3>
+                            <p class="text-gray-600 font-sans">Train when your schedule allows. Early morning to late
+                                night access.</p>
+                        </div>
+
+                        <!-- Feature 6 -->
+                        <div class="feature-card bg-white p-8 rounded-xl shadow-sm hover:shadow-xl">
+                            <div class="text-5xl font-bold text-brand-purple/20 mb-4">06</div>
+                            <h3 class="text-xl font-bold text-brand-dark mb-3">Multiple Disciplines</h3>
+                            <p class="text-gray-600 font-sans">Strength, Boxing, Animal Flow, and more under one roof.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Testimonials (Restored Original Content) -->
+            <section class="py-20 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h2 class="text-4xl font-bold text-brand-dark">REAL PEOPLE. REAL TRANSFORMATIONS.</h2>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-12">
+                        <!-- Arjun -->
+                        <div class="bg-gray-50 p-8 rounded-2xl border border-gray-100">
+                            <div class="flex items-center gap-4 mb-6">
+                                <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=150&q=80"
+                                    alt="Arjun"
+                                    class="w-16 h-16 rounded-full object-cover border-2 border-brand-purple">
+                                <div>
+                                    <h4 class="font-bold text-lg">Arjun R.</h4>
+                                    <div class="text-brand-orange text-sm font-bold">LOST 15KG</div>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 font-sans italic mb-4">"Lost 15kg and gained a new life. The coaches
+                                at FitFactor gave me the confidence to follow through. I've never felt stronger or more
+                                supported."</p>
+                        </div>
+
+                        <!-- Meera -->
+                        <div class="bg-gray-50 p-8 rounded-2xl border border-gray-100">
+                            <div class="flex items-center gap-4 mb-6">
+                                <img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=150&q=80"
+                                    alt="Meera"
+                                    class="w-16 h-16 rounded-full object-cover border-2 border-brand-purple">
+                                <div>
+                                    <h4 class="font-bold text-lg">Meera S.</h4>
+                                    <div class="text-brand-orange text-sm font-bold">CONFIDENCE GAIN</div>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 font-sans italic mb-4">"From zero confidence to loving the gym. As a
+                                complete beginner, I was intimidated. The community here is so welcoming. Now it's the
+                                best part of my day."</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Community Carousel (New Feature with Original Images) -->
+            <section class="py-20 bg-brand-dark">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12 text-white">
+                        <h2 class="text-4xl font-bold mb-4">A COMMUNITY LIKE FAMILY</h2>
+                        <p class="text-gray-400 font-sans">We train together. We grow together.</p>
+                    </div>
+
+                    <div class="carousel-wrapper relative group">
+                        <!-- Left Arrow -->
+                        <button onclick="scrollCarousel('left')"
+                            class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-brand-orange text-white p-3 rounded-r-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+
+                        <div class="carousel-track" id="imageTrack">
+                            <div class="carousel-card relative w-[350px] h-[450px] rounded-xl overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=800&q=80"
+                                    class="w-full h-full object-cover" alt="Community">
+                            </div>
+                            <div class="carousel-card relative w-[350px] h-[450px] rounded-xl overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=800&q=80"
+                                    class="w-full h-full object-cover" alt="Training">
+                            </div>
+                            <div class="carousel-card relative w-[350px] h-[450px] rounded-xl overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=800&q=80"
+                                    class="w-full h-full object-cover" alt="Group">
+                            </div>
+                            <div class="carousel-card relative w-[350px] h-[450px] rounded-xl overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1554284126-aa88f22d8b74?w=800&q=80"
+                                    class="w-full h-full object-cover" alt="Classes">
+                            </div>
+                            <div class="carousel-card relative w-[350px] h-[450px] rounded-xl overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80"
+                                    class="w-full h-full object-cover" alt="Gym">
+                            </div>
+                        </div>
+
+                        <!-- Right Arrow -->
+                        <button onclick="scrollCarousel('right')"
+                            class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-brand-orange text-white p-3 rounded-l-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Home Page Consultation Section (Added) -->
+            <section class="py-20 bg-white">
+                <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div
+                        class="bg-gradient-to-br from-brand-gray to-white p-8 md:p-12 rounded-3xl border border-gray-200 shadow-xl">
+                        <div class="text-center mb-10">
+                            <h2 class="text-3xl md:text-4xl font-bold text-brand-dark mb-4">START YOUR JOURNEY TODAY
+                            </h2>
+                            <p class="text-lg text-gray-600 font-sans max-w-2xl mx-auto">
+                                Not sure where to begin? Book a free consultation with our experts. We'll assess your
+                                fitness level and create a roadmap for your goals.
+                            </p>
+                        </div>
+
+                        <form onsubmit="event.preventDefault(); alert('Request sent! We will contact you shortly.');"
+                            class="max-w-2xl mx-auto">
+                            <div class="grid md:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <input type="text"
+                                        class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-brand-purple focus:ring-1 focus:ring-brand-purple transition"
+                                        placeholder="Your Name" required>
+                                </div>
+                                <div>
+                                    <input type="tel"
+                                        class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-brand-purple focus:ring-1 focus:ring-brand-purple transition"
+                                        placeholder="Phone Number" required>
+                                </div>
+                            </div>
+                            <div class="mb-6">
+                                <select
+                                    class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-brand-purple focus:ring-1 focus:ring-brand-purple transition bg-white text-gray-600">
+                                    <option value="" disabled selected>What is your main goal?</option>
+                                    <option>Weight Loss</option>
+                                    <option>Muscle Gain</option>
+                                    <option>General Fitness</option>
+                                    <option>Online Coaching</option>
+                                </select>
+                            </div>
+                            <button type="submit"
+                                class="w-full py-4 bg-brand-purple text-white font-bold uppercase tracking-wider rounded-lg hover:bg-brand-dark transition-colors shadow-lg hover:shadow-brand-purple/30 transform hover:-translate-y-1">
+                                Book Free Consultation
+                            </button>
+                            <p class="text-center text-xs text-gray-400 mt-4 font-sans">No obligation. 100% Free.</p>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- ==================== ABOUT US PAGE ==================== -->
+        <section id="about" class="page-view">
+            <div class="bg-brand-purple py-20 text-white relative overflow-hidden">
+                <div class="absolute inset-0 bg-brand-dark opacity-50"></div>
+                <div class="max-w-7xl mx-auto px-4 text-center relative z-10">
+                    <h1 class="text-5xl font-bold mb-4">WHO WE ARE</h1>
+                    <div class="w-20 h-1 bg-brand-orange mx-auto"></div>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 py-20">
+                <div class="grid md:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <h2 class="text-3xl font-bold text-brand-dark mb-6 leading-tight">A GYM BUILT ON COMMUNITY,
+                            CARE, AND REAL PROGRESS.</h2>
+                        <p class="text-gray-600 mb-6 leading-relaxed font-sans text-lg">
+                            FitFactor is designed for real people — beginners, families, seniors, professionals,
+                            students — anyone who wants fitness to feel achievable, safe, and motivating.
+                        </p>
+                        <p class="text-gray-600 mb-8 leading-relaxed font-sans text-lg">
+                            We combine expertise with empathy, discipline with warmth, and premium experiences with an
+                            inclusive atmosphere. We are not just a place to workout; we are a place to belong.
+                        </p>
+
+                        <a href="#contact" onclick="navigateTo('contact')"
+                            class="text-brand-orange font-bold uppercase tracking-wider hover:text-brand-purple transition-colors flex items-center gap-2">
+                            Join Our Family <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <div class="relative">
+                        <div class="absolute -top-4 -left-4 w-full h-full border-4 border-brand-purple rounded-xl">
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80"
+                            class="rounded-xl w-full object-cover relative z-10 shadow-2xl" alt="About FitFactor">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== DETAILS & PLANS PAGE (Restored Original Content) ==================== -->
+        <section id="details" class="page-view">
+            <div class="bg-brand-dark py-20 text-white relative">
+                <div class="absolute inset-0 bg-brand-purple opacity-20"></div>
+                <div class="max-w-7xl mx-auto px-4 text-center relative z-10">
+                    <h1 class="text-5xl font-bold mb-4">MEMBERSHIP PLANS</h1>
+                    <p class="text-xl text-gray-300 max-w-2xl mx-auto font-sans">Simple Plans. Complete Clarity. No
+                        hidden fees.</p>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 py-20">
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <!-- Monthly -->
+                    <div
+                        class="bg-white p-8 rounded-2xl border border-gray-200 hover:shadow-xl transition-shadow relative flex flex-col">
+                        <h3 class="text-2xl font-bold text-brand-dark mb-2">MONTHLY</h3>
+                        <p class="text-gray-600 mb-6 text-sm font-sans">No commitment. Pause anytime.</p>
+                        <div class="text-4xl font-bold text-brand-purple mb-8">₹3,000</div>
+
+                        <ul class="space-y-4 text-sm font-sans text-gray-600 mb-8 flex-grow">
+                            <li class="flex items-center"><i class="fas fa-check text-brand-purple mr-3"></i> Free Steam
+                                Bath</li>
+                            <li class="flex items-center"><i class="fas fa-check text-brand-purple mr-3"></i> Free
+                                InBody Scan</li>
+                            <li class="flex items-center"><i class="fas fa-check text-brand-purple mr-3"></i> Full Gym
+                                Access</li>
+                        </ul>
+                        <button onclick="navigateTo('contact')"
+                            class="w-full py-3 border-2 border-brand-dark text-brand-dark font-bold uppercase rounded hover:bg-brand-dark hover:text-white transition-colors">Get
+                            Started</button>
+                    </div>
+
+                    <!-- Quarterly (Featured) -->
+                    <div
+                        class="bg-brand-dark p-8 rounded-2xl border border-brand-dark shadow-2xl relative transform lg:-translate-y-4 flex flex-col">
+                        <div
+                            class="absolute top-0 right-0 bg-brand-orange text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg uppercase">
+                            BEST VALUE</div>
+                        <h3 class="text-2xl font-bold text-white mb-2">QUARTERLY</h3>
+                        <p class="text-gray-300 mb-6 text-sm font-sans">3-month plan. Save ₹1,500.</p>
+                        <div class="text-5xl font-bold text-white mb-8">₹7,500</div>
+
+                        <ul class="space-y-4 text-sm font-sans text-gray-300 mb-8 flex-grow">
+                            <li class="flex items-center"><i class="fas fa-check text-brand-orange mr-3"></i> Full Gym
+                                Access</li>
+                            <li class="flex items-center"><i class="fas fa-check text-brand-orange mr-3"></i> All Group
+                                Classes</li>
+                            <li class="flex items-center"><i class="fas fa-check text-brand-orange mr-3"></i> Free Steam
+                                Bath</li>
+                            <li class="flex items-center"><i class="fas fa-check text-brand-orange mr-3"></i> Free
+                                InBody Scan</li>
+                        </ul>
+                        <button onclick="navigateTo('contact')"
+                            class="w-full py-4 bg-brand-orange text-white font-bold uppercase rounded hover:bg-brand-orange-hover transition-colors shadow-lg">Get
+                            Started</button>
+                    </div>
+
+                    <!-- Annual -->
+                    <div
+                        class="bg-white p-8 rounded-2xl border border-gray-200 hover:shadow-xl transition-shadow relative flex flex-col">
+                        <h3 class="text-2xl font-bold text-brand-dark mb-2">ANNUAL</h3>
+                        <p class="text-gray-600 mb-6 text-sm font-sans">12-month plan. Save ₹11,000.</p>
+                        <div class="text-4xl font-bold text-brand-purple mb-8">₹25,000</div>
+
+                        <ul class="space-y-4 text-sm font-sans text-gray-600 mb-8 flex-grow">
+                            <li class="flex items-center"><i class="fas fa-check text-brand-purple mr-3"></i> Full Gym
+                                Access</li>
+                            <li class="flex items-center"><i class="fas fa-check text-brand-purple mr-3"></i> All Group
+                                Classes</li>
+                            <li class="flex items-center"><i class="fas fa-check text-brand-purple mr-3"></i> Free Steam
+                                Bath</li>
+                            <li class="flex items-center"><i class="fas fa-check text-brand-purple mr-3"></i> Free
+                                InBody Scan</li>
+                        </ul>
+                        <button onclick="navigateTo('contact')"
+                            class="w-full py-3 border-2 border-brand-dark text-brand-dark font-bold uppercase rounded hover:bg-brand-dark hover:text-white transition-colors">Get
+                            Started</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== CONTACT US PAGE ==================== -->
+        <section id="contact" class="page-view">
+            <div class="bg-white pt-10 pb-20">
+                <div class="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-16">
+                    <div>
+                        <h1 class="text-5xl font-bold text-brand-dark mb-6">GET IN TOUCH</h1>
+                        <p class="text-xl text-gray-600 mb-12 font-sans">Your fitness journey starts here. Book a free
+                            consultation or just drop by for a coffee and a tour.</p>
+
+                        <div class="space-y-8 mb-12">
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-12 h-12 bg-brand-purple text-white flex items-center justify-center rounded-lg">
+                                    <i data-lucide="map-pin" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg">Visit Us</h4>
+                                    <p class="text-gray-600 font-sans">123 Gym Street, Chinnakada, Kollam, Kerala 691001
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-12 h-12 bg-brand-purple text-white flex items-center justify-center rounded-lg">
+                                    <i data-lucide="phone" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg">Call Us</h4>
+                                    <p class="text-gray-600 font-sans">+91 98765 43210</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Map Placeholder -->
+                        <div class="w-full h-64 bg-gray-200 rounded-lg overflow-hidden relative border border-gray-300">
+                            <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&q=80"
+                                class="w-full h-full object-cover opacity-60" alt="Map">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <button
+                                    class="bg-white px-4 py-2 rounded shadow font-bold text-brand-dark flex items-center gap-2 hover:bg-gray-100 transition-colors">
+                                    <i data-lucide="navigation" class="w-4 h-4"></i> Get Directions to Kollam
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Consultation Form -->
+                    <div class="bg-gray-50 p-8 md:p-10 rounded-2xl shadow-lg border border-gray-100">
+                        <h3 class="text-2xl font-bold text-brand-dark mb-6">BOOK A CONSULTATION</h3>
+                        <form onsubmit="event.preventDefault(); alert('Request sent! We will contact you shortly.');">
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2 font-sans">Name</label>
+                                    <input type="text"
+                                        class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-brand-purple focus:ring-1 focus:ring-brand-purple transition"
+                                        placeholder="Your Name">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2 font-sans">Phone
+                                        Number</label>
+                                    <input type="tel"
+                                        class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-brand-purple focus:ring-1 focus:ring-brand-purple transition"
+                                        placeholder="+91 0000000000">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2 font-sans">Goal</label>
+                                    <select
+                                        class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-brand-purple focus:ring-1 focus:ring-brand-purple transition bg-white">
+                                        <option>Weight Loss</option>
+                                        <option>Muscle Gain</option>
+                                        <option>General Fitness</option>
+                                        <option>Online Coaching</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2 font-sans">Message
+                                        (Optional)</label>
+                                    <textarea
+                                        class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-brand-purple focus:ring-1 focus:ring-brand-purple transition"
+                                        rows="4" placeholder="Tell us about your fitness history..."></textarea>
+                                </div>
+                                <button type="submit"
+                                    class="w-full py-4 bg-brand-purple text-white font-bold uppercase rounded hover:bg-brand-dark transition-colors shadow-lg mt-2">
+                                    Send Request
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark text-white pt-20 pb-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-12 mb-8 border-b border-gray-800 pb-12">
+                <div class="col-span-1 md:col-span-2">
+                    <span class="font-heading font-bold text-3xl text-white mb-6 block">FIT<span
+                            class="text-brand-orange">FACTOR</span></span>
+                    <p class="text-gray-400 font-sans max-w-sm mb-6">
+                        123 Gym Street, Chinnakada<br>Kollam, Kerala 691001
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#"
+                            class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-brand-orange transition-colors"><i
+                                class="fab fa-instagram"></i></a>
+                        <a href="#"
+                            class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-brand-orange transition-colors"><i
+                                class="fab fa-facebook-f"></i></a>
+                        <a href="#"
+                            class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-brand-orange transition-colors"><i
+                                class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-6 text-brand-orange">QUICK LINKS</h4>
+                    <ul class="space-y-3 font-sans text-gray-400">
+                        <li><a href="#" onclick="navigateTo('home')" class="hover:text-white transition-colors">Home</a>
+                        </li>
+                        <li><a href="#" onclick="navigateTo('about')" class="hover:text-white transition-colors">About
+                                Us</a></li>
+                        <li><a href="#" onclick="navigateTo('details')"
+                                class="hover:text-white transition-colors">Plans</a></li>
+                        <li><a href="#" onclick="navigateTo('contact')"
+                                class="hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-6 text-brand-orange">HOURS</h4>
+                    <ul class="space-y-3 font-sans text-gray-400">
+                        <li class="flex justify-between"><span>Mon - Sun</span> <span>5:00 AM - 11:00 PM</span></li>
+                        <li class="mt-2 text-white font-bold">Open All Days</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-sm text-center">
+                &copy; 2025 FitFactor. All Rights Reserved.
+                <div class="footer-credit">
+                    Crafted with passion by <a href="#">Wahn Design</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- Navigation Logic (SPA Feel) ---
+        function navigateTo(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page-view').forEach(page => {
+                page.classList.remove('active');
+                setTimeout(() => {
+                    if (!page.classList.contains('active')) page.style.display = 'none';
+                }, 400); // match transition time
+            });
+
+            // Show selected page
+            const selectedPage = document.getElementById(pageId);
+            if (selectedPage) {
+                selectedPage.style.display = 'block';
+                // Small timeout to allow display:block to render before opacity change
+                setTimeout(() => {
+                    selectedPage.classList.add('active');
+                }, 10);
+
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // --- Mobile Menu Toggle ---
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // --- Popup Logic ---
+        function showOffer() {
+            const popup = document.getElementById('offerPopup');
+            const content = document.getElementById('offerContent');
+
+            popup.classList.remove('opacity-0', 'pointer-events-none');
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
+        }
+
+        function closeOffer() {
+            const popup = document.getElementById('offerPopup');
+            const content = document.getElementById('offerContent');
+
+            popup.classList.add('opacity-0', 'pointer-events-none');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+        }
+
+        // Trigger popup after 3 seconds
+        setTimeout(showOffer, 3000);
+
+
+        // --- Community Carousel Logic ---
+        function scrollCarousel(direction) {
+            const track = document.getElementById('imageTrack');
+            const scrollAmount = 320; // card width + gap
+
+            if (direction === 'left') {
+                track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            } else {
+                track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }
+        }
+
+        // --- Icon Initialization ---
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
