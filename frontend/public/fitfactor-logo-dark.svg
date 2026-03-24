@@ -1,0 +1,21 @@
+<svg width="1180" height="300" viewBox="0 0 1180 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="fitfactor-logo-dark-bg" x1="62" y1="54" x2="222" y2="218" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4C1D95"/>
+      <stop offset="1" stop-color="#1A0B2E"/>
+    </linearGradient>
+    <linearGradient id="fitfactor-logo-dark-slash" x1="148" y1="64" x2="184" y2="216" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF8A3D"/>
+      <stop offset="1" stop-color="#FF6B00"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="24" y="20" width="260" height="260" rx="72" fill="url(#fitfactor-logo-dark-bg)"/>
+  <rect x="34" y="30" width="240" height="240" rx="62" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="5"/>
+  <path d="M184 56H230L205 109H236L165 240H119L159 164H128L184 56Z" fill="url(#fitfactor-logo-dark-slash)"/>
+  <path d="M95 61C95 52.16 102.16 45 111 45H209C217.84 45 225 52.16 225 61V78C225 86.84 217.84 94 209 94H135V128H181C189.84 128 197 135.16 197 144V161C197 169.84 189.84 177 181 177H135V233C135 241.84 127.84 249 119 249H111C102.16 249 95 241.84 95 233V61Z" fill="#F8FAFC"/>
+
+  <text x="320" y="184" font-family="Oswald, Arial, sans-serif" font-size="124" font-weight="700" letter-spacing="6">
+    <tspan fill="#1A0B2E">FIT</tspan><tspan fill="#FF6B00">FACTOR</tspan>
+  </text>
+</svg>

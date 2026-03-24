@@ -1,0 +1,25 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="fitfactor-bg" x1="78" y1="72" x2="434" y2="440" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4C1D95"/>
+      <stop offset="1" stop-color="#1A0B2E"/>
+    </linearGradient>
+    <linearGradient id="fitfactor-slash" x1="264" y1="96" x2="344" y2="416" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF8A3D"/>
+      <stop offset="1" stop-color="#FF6B00"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="36" y="36" width="440" height="440" rx="120" fill="url(#fitfactor-bg)"/>
+  <rect x="52" y="52" width="408" height="408" rx="104" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="8"/>
+
+  <path
+    d="M304 96H382L340 186H392L270 416H192L260 286H208L304 96Z"
+    fill="url(#fitfactor-slash)"
+  />
+
+  <path
+    d="M152 104C152 89.64 163.64 78 178 78H346C360.36 78 372 89.64 372 104V132C372 146.36 360.36 158 346 158H216V214H300C314.36 214 326 225.64 326 240V268C326 282.36 314.36 294 300 294H216V404C216 418.36 204.36 430 190 430H178C163.64 430 152 418.36 152 404V104Z"
+    fill="#F8FAFC"
+  />
+</svg>
